@@ -18,8 +18,12 @@ runs/*
 !runs/main/**
 
 # ---- Rendered media & generated pages ----
+# The README media under assets/ and the reference demo are tracked on purpose;
+# everything else rendered locally is not.
 *.mp4
 *.gif
+!assets/gif/*.gif
+!runs/main/quadbot_demo.mp4
 quadbot_sim.html
 
 # ---- MuJoCo ----

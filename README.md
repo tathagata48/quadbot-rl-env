@@ -7,14 +7,13 @@
 No downloaded URDFs. No reference gaits. No motion capture.
 The robot is generated in Python, the reward is 14 shaped terms, and the trot emerges on its own.
 
-[![CI](https://github.com/tathagata48/quadbot-rl-env/actions/workflows/ci.yml/badge.svg)](https://github.com/tathagata48/quadbot-rl-env/actions/workflows/ci.yml)
-[![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-3776AB?logo=python&logoColor=white)](https://www.python.org/)
-[![MuJoCo](https://img.shields.io/badge/MuJoCo-3.2%2B-ff6f00)](https://mujoco.org/)
-[![Gymnasium](https://img.shields.io/badge/Gymnasium-1.0%2B-0081A5)](https://gymnasium.farama.org/)
-[![Stable-Baselines3](https://img.shields.io/badge/SB3-PPO-8A2BE2)](https://stable-baselines3.readthedocs.io/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![CI](https://github.com/tathagata48/quadbot-rl-env/actions/workflows/ci.yml/badge.svg)](https://github.com/tathagata48/quadbot-rl-env/actions/workflows/ci.yml) [![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-3776AB?logo=python&logoColor=white)](https://www.python.org/) [![MuJoCo](https://img.shields.io/badge/MuJoCo-3.2%2B-ff6f00)](https://mujoco.org/) [![Gymnasium](https://img.shields.io/badge/Gymnasium-1.0%2B-0081A5)](https://gymnasium.farama.org/) [![Stable-Baselines3](https://img.shields.io/badge/SB3-PPO-8A2BE2)](https://stable-baselines3.readthedocs.io/) [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
-<img src="runs/main/learning_curves.png" alt="Episode return and command tracking over 8M environment steps" width="100%">
+<br>
+
+<img src="assets/gif/walk.gif" alt="The trained QuadBot walking on command at 0.4, 0.7 and 1.0 m/s" width="640">
+
+<sub>The trained policy tracking speed commands. Velocity error stays under 2% and it never falls.</sub>
 
 </div>
 
@@ -22,8 +21,10 @@ The robot is generated in Python, the reward is 14 shaped terms, and the trot em
 
 ## Table of contents
 
+- [What 8 million steps buys](#what-8-million-steps-buys)
 - [What this is](#what-this-is)
 - [Results](#results)
+- [The emergent gait](#the-emergent-gait)
 - [Install](#install)
 - [Use the pretrained policy](#use-the-pretrained-policy)
 - [Train it yourself](#train-it-yourself)
@@ -36,10 +37,25 @@ The robot is generated in Python, the reward is 14 shaped terms, and the trot em
 
 ---
 
+## What 8 million steps buys
+
+Same robot, same physics, same 48 numbers going in. The only difference is 8 million environment steps of PPO.
+
+<div align="center">
+<img src="assets/gif/before-after.gif" alt="Left: the untrained policy collapses immediately. Right: the trained policy trots away." width="100%">
+</div>
+
 ## What this is
 
 A complete, self-contained legged-locomotion RL project — robot, environment, training, evaluation
 and deployment — in about 3,000 lines of Python.
+
+<div align="center">
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="assets/diagrams/pipeline-dark.svg">
+  <img src="assets/diagrams/pipeline-light.svg" alt="Pipeline: RobotSpec to MJCF to the Gymnasium env to PPO to an exported NumPy policy, which feeds teleop, the browser viewer and NumPy deployment" width="100%">
+</picture>
+</div>
 
 |  | |
 |---|---|
@@ -62,11 +78,18 @@ Evaluated with the deterministic policy over 6 × 20 s episodes:
 
 Velocity tracking is within 2% across the whole trained command range, and the robot did not fall once.
 
-### The emergent gait
+<img src="runs/main/learning_curves.png" alt="Episode return and command tracking over 8M environment steps" width="100%">
 
-<img src="runs/main/footfall.png" alt="Footfall pattern at 0.7 m/s showing a trot: diagonal pairs FL/RR and FR/RL alternate" width="100%">
+## The emergent gait
 
 At 0.7 m/s the policy settles into a clean **trot** — diagonal feet strike together, lateral pairs alternate:
+
+<div align="center">
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="assets/diagrams/gait-dark.svg">
+  <img src="assets/diagrams/gait-light.svg" alt="Footfall diagram: FL and RR are in phase, FR and RL are in antiphase, each foot down about half the cycle" width="100%">
+</picture>
+</div>
 
 | Metric | Value | Reading |
 |:---|:---|:---|
@@ -76,7 +99,14 @@ At 0.7 m/s the policy settles into a clean **trot** — diagonal feet strike tog
 | Duty factor | **≈0.50** | each foot is down half the cycle |
 | Stride rate | **1.5 strides/s** | |
 
-That is the textbook definition of a trot, and no reward term asked for it.
+That is the textbook definition of a trot, and no reward term asked for it. Slowed down 5×, with the
+contact pattern in the corner:
+
+<div align="center">
+<img src="assets/gif/trot-slowmo.gif" alt="The trot at 5x slow motion, diagonal feet landing together" width="560">
+</div>
+
+The measured trace behind the diagram is [`runs/main/footfall.png`](runs/main/footfall.png).
 
 ## Install
 
@@ -162,6 +192,12 @@ python teleop.py --policy runs/main/quadbot_policy.npz
 | <kbd>R</kbd> | reset |
 | <kbd>Esc</kbd> | quit |
 
+Turning under yaw commands, which is what <kbd>←</kbd> <kbd>→</kbd> drive:
+
+<div align="center">
+<img src="assets/gif/turning.gif" alt="The robot turning while walking, under a yaw-rate command" width="560">
+</div>
+
 ## Interactive 3D view
 
 `sim_viewer` renders the simulation in the browser with three.js — live and steerable inside Colab,
@@ -183,6 +219,13 @@ save_simulation_html("quadbot_sim.html", policy, cfg)   # a self-contained page,
 
 Generated from `RobotSpec` — every dimension, mass, gain and joint limit is a field you can change.
 
+<div align="center">
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="assets/diagrams/robot-dark.svg">
+  <img src="assets/diagrams/robot-light.svg" alt="Side view of the nominal stance with link lengths and joint limits, and a top view naming the four legs" width="100%">
+</picture>
+</div>
+
 | | |
 |:---|:---|
 | Mass | 11.3 kg total, 5.5 kg of it torso |
@@ -192,6 +235,25 @@ Generated from `RobotSpec` — every dimension, mass, gain and joint limit is a 
 | Sensing | base state + 4 foot touch sensors |
 
 ### The MDP
+
+One control step is 20 ms: the policy runs once, the PD servos hold the target, and MuJoCo advances
+five 4 ms steps underneath.
+
+<div align="center">
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="assets/diagrams/control-loop-dark.svg">
+  <img src="assets/diagrams/control-loop-light.svg" alt="The control loop: actor, action scaling, PD servos, MuJoCo physics, state, observation, and the reward branch feeding PPO" width="100%">
+</picture>
+</div>
+
+The 48 numbers going in and the 12 coming out, in order:
+
+<div align="center">
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="assets/diagrams/observation-dark.svg">
+  <img src="assets/diagrams/observation-light.svg" alt="The observation vector: projected gravity, base linear and angular velocity, command, joint positions, joint velocities and previous action" width="100%">
+</picture>
+</div>
 
 | | |
 |:---|:---|
@@ -206,20 +268,27 @@ Generated from `RobotSpec` — every dimension, mass, gain and joint limit is a 
 
 Two terms want forward progress; twelve keep it honest.
 
-| Wants | Terms |
-|:---|:---|
-| **Track the command** | `tracking_lin_vel` +1.5, `tracking_ang_vel` +0.5 |
-| **Stay level and tall** | `orientation` −5.0, `base_height` −30.0, `lin_vel_z` −2.0, `ang_vel_xy` −0.05 |
-| **Step cleanly** | `feet_air_time` +1.0, `feet_slip` −0.1, `collision` −1.0 |
-| **Move smoothly and cheaply** | `action_rate` −0.01, `torques` −1e-4, `dof_acc` −2.5e-7 |
-| **Respect the hardware** | `dof_pos_limits` −10.0, `abad_deviation` −0.5 |
+<div align="center">
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="assets/diagrams/reward-dark.svg">
+  <img src="assets/diagrams/reward-light.svg" alt="The fourteen reward terms and their weights, grouped into tracking, posture, footfall, smoothness and hardware limits" width="100%">
+</picture>
+</div>
 
 Tracking uses `exp(-error² / 0.25)`, and the total is clipped at zero so early exploration is never
 punished into standing still.
 
 ### Training
 
-PPO (Stable-Baselines3) with `VecNormalize` on observations and rewards.
+PPO (Stable-Baselines3) with `VecNormalize` on observations and rewards. The actor and the critic get
+their own trunks; only the actor survives into the `.npz`.
+
+<div align="center">
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="assets/diagrams/network-dark.svg">
+  <img src="assets/diagrams/network-light.svg" alt="Separate 256-256-128 ELU trunks for actor and critic, with the actor exported to a 444 KB npz" width="100%">
+</picture>
+</div>
 
 | | | | |
 |:---|:---|:---|:---|
@@ -244,7 +313,10 @@ quadbot-rl-env/
 ├── make_video.py        CLI: export, evaluate, render the demo MP4
 ├── teleop.py            keyboard control in the MuJoCo viewer
 ├── build_notebook.py    regenerates the Colab notebook
+├── tools/
+│   └── render_diagrams.py   regenerates every SVG on this page
 ├── QuadBot_RL_Colab.ipynb
+├── assets/              the GIFs and diagrams used here
 ├── tests/               smoke tests: env contract + the policy still walks
 └── runs/main/           the reference 8M-step run (see below)
 ```
@@ -260,8 +332,18 @@ quadbot-rl-env/
 | `results.json` | evaluation episodes, gait analysis, SB3-vs-NumPy agreement |
 | `training_history.json`, `tb/` | full learning curves and TensorBoard logs |
 | `learning_curves.png`, `footfall.png` | the plots on this page |
+| `quadbot_demo.mp4` | the 45 s demo the GIFs above are cut from |
 
 The run is committed deliberately: it makes every number above checkable without training anything.
+
+### The figures
+
+The diagrams are generated, like the robot. They are laid out from the same constants the code uses, so
+they cannot quietly drift out of date:
+
+```bash
+python tools/render_diagrams.py     # writes assets/diagrams/*.svg, light and dark
+```
 
 ## Reproducing the reference run
 
