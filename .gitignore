@@ -1,0 +1,36 @@
+# ---- Python ----
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.eggs/
+build/
+dist/
+.venv/
+venv/
+env/
+
+# ---- Training output ----
+# runs/main/ is the reference run and IS tracked on purpose (see README).
+# Everything else under runs/ is local experiment output.
+runs/*
+!runs/main/
+!runs/main/**
+
+# ---- Rendered media & generated pages ----
+*.mp4
+*.gif
+quadbot_sim.html
+
+# ---- MuJoCo ----
+MUJOCO_LOG.TXT
+
+# ---- Notebooks & editors ----
+.ipynb_checkpoints/
+.vscode/
+.idea/
+*.swp
+
+# ---- OS ----
+.DS_Store
+Thumbs.db

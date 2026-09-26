@@ -1,0 +1,11 @@
+# Core simulation + RL stack (Python 3.10+)
+mujoco>=3.2
+gymnasium>=1.0
+stable-baselines3>=2.4
+numpy>=1.26
+
+# Rendering, plots and logging
+imageio[ffmpeg]>=2.34
+matplotlib>=3.8
+pandas>=2.0
+tensorboard>=2.16

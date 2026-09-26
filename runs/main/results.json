@@ -1,0 +1,122 @@
+{
+  "policy_npz": "runs/main/quadbot_policy.npz",
+  "numpy_vs_sb3_max_abs_diff": 5.960464477539062e-07,
+  "evaluation": [
+    {
+      "command_vx": 0.4,
+      "episode": 0,
+      "return_": 1952.5,
+      "steps": 1000,
+      "fell": false,
+      "mean_vx": 0.408,
+      "distance_m": 8.01
+    },
+    {
+      "command_vx": 0.4,
+      "episode": 1,
+      "return_": 1950.7,
+      "steps": 1000,
+      "fell": false,
+      "mean_vx": 0.409,
+      "distance_m": 8.08
+    },
+    {
+      "command_vx": 0.7,
+      "episode": 0,
+      "return_": 1938.8,
+      "steps": 1000,
+      "fell": false,
+      "mean_vx": 0.7,
+      "distance_m": 13.86
+    },
+    {
+      "command_vx": 0.7,
+      "episode": 1,
+      "return_": 1937.0,
+      "steps": 1000,
+      "fell": false,
+      "mean_vx": 0.701,
+      "distance_m": 13.85
+    },
+    {
+      "command_vx": 1.0,
+      "episode": 0,
+      "return_": 1897.2,
+      "steps": 1000,
+      "fell": false,
+      "mean_vx": 0.996,
+      "distance_m": 19.71
+    },
+    {
+      "command_vx": 1.0,
+      "episode": 1,
+      "return_": 1901.7,
+      "steps": 1000,
+      "fell": false,
+      "mean_vx": 0.995,
+      "distance_m": 19.77
+    }
+  ],
+  "gait": {
+    "label": "trot",
+    "command": [
+      0.7,
+      0.0,
+      0.0
+    ],
+    "seconds": 8.0,
+    "dt": 0.02,
+    "fell": false,
+    "diagonal_sync": 0.91875,
+    "lateral_sync": 0.08125,
+    "fore_hind_sync": 0.03125,
+    "diagonal_corr": 0.838272848895632,
+    "lateral_corr": -0.8390608137337532,
+    "fore_hind_corr": -0.9402911086284464,
+    "duty_factor": [
+      0.52,
+      0.4875,
+      0.5025,
+      0.5525
+    ],
+    "stride_hz": 1.5
+  },
+  "summary": [
+    "6 evaluation episodes, deterministic policy: 0 falls",
+    "command 0.40 m/s  ->  measured 0.41 m/s   (8.0 m per episode)",
+    "command 0.70 m/s  ->  measured 0.70 m/s   (13.9 m per episode)",
+    "command 1.00 m/s  ->  measured 1.00 m/s   (19.7 m per episode)",
+    "gait: trot  -  diagonal feet in phase 92% of the time, 1.5 strides/s"
+  ],
+  "video": {
+    "random": {
+      "mean_vx": -0.2387013580871386,
+      "falls": 0,
+      "distance": -0.667487491384599,
+      "frames": 150
+    },
+    "speed_sweep": {
+      "mean_vx": 0.723110500052542,
+      "falls": 0,
+      "distance": 7.221421459754743,
+      "frames": 500
+    },
+    "turning": {
+      "mean_vx": 0.5934231836932323,
+      "falls": 0,
+      "distance": 2.4634219293712234,
+      "frames": 400
+    },
+    "slow_motion": {
+      "mean_vx": 0.8042399618574839,
+      "falls": 0,
+      "distance": 1.9984832131764134,
+      "frames": 400
+    },
+    "video": {
+      "path": "runs/main/quadbot_demo.mp4",
+      "seconds": 45.0,
+      "frames": 2250
+    }
+  }
+}
